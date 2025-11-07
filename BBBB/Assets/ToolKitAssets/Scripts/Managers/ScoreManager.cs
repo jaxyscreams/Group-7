@@ -74,7 +74,7 @@ public class ScoreManager : MonoBehaviour
     {
         if (_playerScore < _enemyScore)
         { GameStateManager.Instance.LoseGame(); }
-        else
+        else if (_playerScore > _enemyScore)
         { GameStateManager.Instance.FruitEaten(); }
         if (enemiesLeft.Count == 0)
         { GameStateManager.Instance.WinGame(); }
