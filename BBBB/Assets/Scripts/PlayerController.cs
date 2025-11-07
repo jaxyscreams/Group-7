@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Events;
+
 [RequireComponent(typeof(PlayerInput))]
 
 
@@ -15,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public bool isMoving;
 
     #endregion
+    public GameObject pauseScreen;
 
     private Rigidbody2D playerbody;
 
@@ -28,54 +31,55 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        
         UpdateMovement();
     }
 
 
-    private void UpdateMovement()
+private void UpdateMovement()
+{
+
+if (canMove)
+{
+    if (_input.moveVector.x != 0 && Mathf.Abs(_input.moveVector.x) > Mathf.Abs(_input.moveVector.y))
     {
-
-        if (canMove)
-        {
-            if (_input.moveVector.x != 0 && Mathf.Abs(_input.moveVector.x) > Mathf.Abs(_input.moveVector.y)) 
-            {
-                moveDir.x = _input.moveVector.x;
-                moveDir.y = 0;
-            }
-
-            if (_input.moveVector.y != 0 && Mathf.Abs(_input.moveVector.y) > Mathf.Abs(_input.moveVector.x)) 
-            {
-                moveDir.y = _input.moveVector.y;
-                moveDir.x = 0;
-            }
-                
-
-            if (Mathf.Abs(_input.moveVector.y) == Mathf.Abs(_input.moveVector.x))
-            {
-                moveDir.y = 0;
-                moveDir.x = _input.moveVector.x;
-            }
-
-            if (_input.moveVector == Vector2.zero)
-            {
-                moveDir = Vector2.zero;
-            }
-                
-            if (Mathf.Abs(moveDir.magnitude) > 0)
-            {
-                isMoving = true;
-            }
-            if (Mathf.Abs(moveDir.magnitude) !> 0)
-            {
-                isMoving = false;
-            }    
-        }
-        else
-
-        {
-            moveDir = Vector2.zero;
-        }
-
-        playerbody.linearVelocity = moveDir * moveSpeed;
+        moveDir.x = _input.moveVector.x;
+        moveDir.y = 0;
     }
+
+    if (_input.moveVector.y != 0 && Mathf.Abs(_input.moveVector.y) > Mathf.Abs(_input.moveVector.x))
+    {
+        moveDir.y = _input.moveVector.y;
+        moveDir.x = 0;
+    }
+
+
+    if (Mathf.Abs(_input.moveVector.y) == Mathf.Abs(_input.moveVector.x))
+    {
+        moveDir.y = 0;
+        moveDir.x = _input.moveVector.x;
+    }
+
+    if (_input.moveVector == Vector2.zero)
+    {
+        moveDir = Vector2.zero;
+    }
+
+    if (Mathf.Abs(moveDir.magnitude) > 0)
+    {
+        isMoving = true;
+    }
+    if (Mathf.Abs(moveDir.magnitude) !> 0)
+    {
+        isMoving = false;
+    }
+}
+else
+
+{
+    moveDir = Vector2.zero;
+}
+
+playerbody.linearVelocity = moveDir * moveSpeed;
+}
 }

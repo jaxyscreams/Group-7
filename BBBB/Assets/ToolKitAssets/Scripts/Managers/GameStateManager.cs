@@ -12,6 +12,7 @@ public class GameStateManager : MonoBehaviour
     [Header("Events (Add in the Inspector UI screens, ForwardRunner etc.)")]
     public UnityEvent OnGameWin;
     public UnityEvent OnGameLose;
+    public UnityEvent OnFruitEaten;
     public UnityEvent OnGameRespawnAtCheckpoint;
     public UnityEvent OnGameRestart;
     public UnityEvent OnGameNextLevel;
@@ -29,6 +30,11 @@ public class GameStateManager : MonoBehaviour
         if (state != GameState.Playing) return;
         state = GameState.Won;
         OnGameWin?.Invoke();
+    }
+    public void FruitEaten()
+    {
+        state = GameState.Playing;
+        OnFruitEaten?.Invoke();
     }
 
     public void LoseGame()

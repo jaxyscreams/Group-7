@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
@@ -8,12 +9,27 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager Instance { get; private set; }
 
     public UnityEvent OnAddScore;
+    
+    public List<GameObject> foodLeft;
+    public List<GameObject> enemiesLeft;
 
     [SerializeField, Header("Text UI for score + highscore display")]
-    private TextMeshProUGUI scoreText;
+    private TextMeshProUGUI playerScoreText;
+    [SerializeField]private TextMeshProUGUI enemyScoreText;
 
-    private int score = 0;
-    private int highscore = 0;
+    
+    
+    private int PlayerScore
+    {
+        get { return _playerScore;} set { _playerScore = value; }
+    }
+    private int EnemyScore    {
+        get { return _enemyScore;} set { _enemyScore = value; }
+    }
+
+    public int _playerScore;
+    public int _enemyScore;
+    
 
     private void Awake()
     {
@@ -26,33 +42,49 @@ public class ScoreManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        highscore = PlayerPrefs.GetInt("HighScore", 0);
+        foodLeft = new List<GameObject>(GameObject.FindGameObjectsWithTag("Food"));
+        enemiesLeft = new List<GameObject>(GameObject.FindGameObjectsWithTag("Enemy"));
         UpdateUI();
     }
 
-    public void AddScore(int value)
+    public void AddPlayerScore(int value)
     {
         OnAddScore?.Invoke();
-        score += value;
-        if (score > highscore)
-        {
-            highscore = score;
-            PlayerPrefs.SetInt("HighScore", highscore);
-        }
+        PlayerScore += value;
         UpdateUI();
+        if (foodLeft.Count == 0)
+        { LossOrWin(); }
+    }
+    public void AddEnemyScore(int value)
+    {
+        OnAddScore?.Invoke();
+        EnemyScore += value;
+        UpdateUI();
+        if (foodLeft.Count == 0)
+        { LossOrWin(); }
     }
 
     public void ResetScore()
     {
-        score = 0;
+        PlayerScore = 0;
         UpdateUI();
+    }   
+
+    public void LossOrWin()
+    {
+        if (_playerScore < _enemyScore)
+        { GameStateManager.Instance.LoseGame(); }
+        else
+        { GameStateManager.Instance.FruitEaten(); }
+        if (enemiesLeft.Count == 0)
+        { GameStateManager.Instance.WinGame(); }
     }
 
     private void UpdateUI()
     {
-        if (scoreText != null)
-        {
-            scoreText.text = $"Score: {score}\nHigh: {highscore}";
-        }
+        if (playerScoreText != null)
+        { playerScoreText.text = $"Eaten: {PlayerScore}"; }
+        if (enemyScoreText != null)
+        { enemyScoreText.text = $"Lost: {EnemyScore}"; }
     }
 }

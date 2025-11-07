@@ -13,12 +13,13 @@ public class SceneTransitionManager : MonoBehaviour
         else Destroy(gameObject);         
     }
 
-    public void LoadNextScene(string sceneName)
+    public void LoadNextScene()
     {
-        SceneManager.LoadScene(sceneName);
+        int nextSceneBuildInt = SceneManager.GetActiveScene().buildIndex + 1;
+        SceneManager.LoadScene("Level" + nextSceneBuildInt);
     }
 
-    public void StartGame(string sceneName)
+    public void LoadSpecificScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
     }
