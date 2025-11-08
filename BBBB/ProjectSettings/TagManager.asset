@@ -7,6 +7,7 @@ TagManager:
   - Food
   - Enemy
   - Player2
+  - UpgradeHolder
   layers:
   - Default
   - TransparentFX

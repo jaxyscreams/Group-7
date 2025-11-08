@@ -17,10 +17,12 @@ public class LoseScreen : MonoBehaviour
     {
         //Debug.Log("show me lose");
         GetComponent<Canvas>().enabled = true;
+        Time.timeScale = 0f;
     }
     
     public void Hide()
     {
         GetComponent<Canvas>().enabled = false;
+        Time.timeScale = 1f;
     }
 }

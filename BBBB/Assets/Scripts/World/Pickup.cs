@@ -37,11 +37,6 @@ public class Pickup : MonoBehaviour
         {
             ScoreManager.Instance.foodLeft.Remove(gameObject);
             ScoreManager.Instance.AddEnemyScore(value);
-            OnPickup?.Invoke();
-            if (pickupSound != null)
-            {
-                AudioSource.PlayClipAtPoint(pickupSound, transform.position);
-            }
             Destroy(gameObject);
         }
 

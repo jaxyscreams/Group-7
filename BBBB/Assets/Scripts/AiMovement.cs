@@ -36,12 +36,20 @@ public class AiMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Player" && ScoreManager.Instance.foodLeft.Count > 0)
+        if (other.gameObject.CompareTag("Player") && other.gameObject.GetComponent<PlayerController>()._shieldAmount > 0 
+                                                  && ScoreManager.Instance.foodLeft.Count > 0)
         {
+            SoundManager.Instance.soundEffectSource.Play();
+            other.gameObject.GetComponent<PlayerController>()._shieldAmount -= 1;
+        } else if (other.gameObject.CompareTag("Player") && ScoreManager.Instance.foodLeft.Count > 0)
+        {
+            SoundManager.Instance.soundEffectSource.Play();
             Destroy(other.gameObject);
             GameStateManager.Instance.LoseGame();  
-        } else if (other.gameObject.tag == "Player" && ScoreManager.Instance.foodLeft.Count <= 0)
+        } 
+        if (other.gameObject.CompareTag("Player") && ScoreManager.Instance.foodLeft.Count <= 0)
         {
+            SoundManager.Instance.soundEffectSource.Play();
             ScoreManager.Instance.enemiesLeft.Remove(gameObject);
             ScoreManager.Instance.LossOrWin();
             Destroy(gameObject);
